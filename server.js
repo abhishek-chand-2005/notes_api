@@ -17,7 +17,7 @@ const cors = require('cors');
 
 // allow all origins — or pass specific frontend URL
 app.use(cors({
-    origin: 'https://notes-api-frontend.vercel.app', // 👈 your deployed frontend
+    origin: 'https://notes-api-frontend-2mur.vercel.app/', // 👈 your deployed frontend
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true
 }));
