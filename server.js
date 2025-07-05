@@ -13,6 +13,16 @@ app.use(express.json());
 let notes = [];
 
 
+const cors = require('cors');
+
+// allow all origins — or pass specific frontend URL
+app.use(cors({
+    origin: 'https://notes-api-frontend.vercel.app', // 👈 your deployed frontend
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials: true
+}));
+
+
 // GET: all notes
 app.get("/notes", async (req, res) => {
   const notes = await Note.find();
