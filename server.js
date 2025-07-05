@@ -6,7 +6,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 require("dotenv").config();
-mongoose.connect(process.env.MONGO_URI)
 
 app.use(express.json());
 
@@ -17,7 +16,7 @@ const cors = require('cors');
 
 // allow all origins — or pass specific frontend URL
 app.use(cors({
-    origin: 'https://notes-api-frontend-2mur.vercel.app/', // 👈 your deployed frontend
+    origin: 'https://notes-api-frontend-2mur.vercel.app', // 👈 your deployed frontend
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true
 }));
