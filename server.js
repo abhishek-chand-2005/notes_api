@@ -1,42 +1,62 @@
 const express = require('express' );
+const mongoose = require("mongoose");
+const Note = require("./models/Note");
+
 const app = express();
 
+require("dotenv").config();
 app.use(express.json());
 
 let notes = [];
 
 
-app.get('/', (req, res)=> {
-    res.send('Hello hi world!');
+// GET: all notes
+app.get("/notes", async (req, res) => {
+  const notes = await Note.find();
+  res.json(notes);
 });
 
-app.post('/notes', (req, res) => {
-    console.log(req.body);
-    notes.push(req.body)
-    res.json({
-        message: 'Note added successfully',})
+// POST: create note
+app.post("/notes", async (req, res) => {
+  try {
+    const note = await Note.create(req.body);
+    res.status(201).json(note);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
+
 
 app.get('/notes', (req, res)=>{
     res.json(notes);
 });
  
-app.delete('/notes/:index', (req, res) => {
-    const index = req.params.index;
-    delete notes[index];
-    res.json({
-        message: 'Note deleted successfully',
-})});
 
-app.patch('/notes/:index', (req, res) => {
-    const index = req.params.index;
-    const {title} = req.body;
-
-    notes[index].title = title;
-    res.json({
-        message: 'Note updated successfully'
-    });
+// DELETE: delete note
+app.delete("/notes/:id", async (req, res) => {
+  try {
+    await Note.findByIdAndDelete(req.params.id);
+    res.json({ message: "Note deleted" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
+// PATCH: update note
+app.patch("/notes/:id", async (req, res) => {
+  try {
+    const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(note);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch(err => console.error("❌ MongoDB connection failed:", err));
 
 app.listen(3000, (req, res)=> {
     console.log('Server is running on port 3000');
