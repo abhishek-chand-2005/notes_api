@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Note = require("./models/Note");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 require("dotenv").config();
 mongoose.connect(process.env.MONGO_URI)
@@ -60,6 +61,6 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("✅ Connected to MongoDB"))
 .catch(err => console.error("❌ MongoDB connection failed:", err));
 
-app.listen(3000, (req, res)=> {
-    console.log('Server is running on port 3000');
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
