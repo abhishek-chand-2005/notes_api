@@ -5,6 +5,8 @@ const Note = require("./models/Note");
 const app = express();
 
 require("dotenv").config();
+mongoose.connect(process.env.MONGO_URI)
+
 app.use(express.json());
 
 let notes = [];
