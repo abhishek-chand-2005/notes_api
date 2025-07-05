@@ -53,6 +53,31 @@ app.patch("/notes/:id", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+// ✅ Schema to store login data
+const LoginSchema = new mongoose.Schema({
+    email: String,
+    password: String,
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
+});
+
+const Login = mongoose.model("Login", LoginSchema);
+
+// ✅ Route to save login form data
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const newLogin = new Login({ email, password });
+        await newLogin.save();
+        res.json({ message: 'Login data saved ✅' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: '❌ Failed to save login data' });
+    }
+});
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
